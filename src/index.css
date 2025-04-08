@@ -1,0 +1,85 @@
+import React, { useState } from 'react';
+
+const PersonForm = () => {
+  const [nombre, setNombre] = useState('');
+  const [edad, setEdad] = useState('');
+  const [genero, setGenero] = useState('');
+  const [sexo, setSexo] = useState('');
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const personData = {
+      nombre,
+      edad: parseInt(edad),
+      genero,
+      sexo,
+    };
+
+    try {
+      // Call the Go server's API endpoint running on port 8080
+      const response = await fetch('http://localhost:8080/api/persons', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(personData),
+      });
+
+      if (response.ok) {
+        alert('Persona creada exitosamente');
+      } else {
+        alert('Error al crear la persona');
+      }
+    } catch (error) {
+      alert('Error de conexión');
+    }
+  };
+
+  return (
+    <div>
+      <h2>Formulario de Persona</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Nombre:</label>
+          <input
+            type="text"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Edad:</label>
+          <input
+            type="number"
+            value={edad}
+            onChange={(e) => setEdad(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Género:</label>
+          <input
+            type="text"
+            value={genero}
+            onChange={(e) => setGenero(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Sexo:</label>
+          <input
+            type="text"
+            value={sexo}
+            onChange={(e) => setSexo(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Crear Persona</button>
+      </form>
+    </div>
+  );
+};
+
+export default PersonForm;
